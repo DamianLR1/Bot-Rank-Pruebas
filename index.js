@@ -119,7 +119,7 @@ function roundRect(ctx, x, y, w, h, r, fill, stroke) {
 }
 
 async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIconURL }) {
-  const W = 560, H = 620;
+  const W = 700, H = 780;
   const canvas = createCanvas(W, H);
   const ctx = canvas.getContext('2d');
 
@@ -161,8 +161,8 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.beginPath(); ctx.moveTo(0, 1); ctx.lineTo(W, 1); ctx.stroke();
 
   // --- HEADER ---
-  const headerH = 80;
-  const iconX = 18, iconY = 14, iconR = 26;
+  const headerH = 96;
+  const iconX = 22, iconY = 16, iconR = 32;
 
   // Cargar ícono del clan si hay URL
   let guildIcon = null;
@@ -204,7 +204,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.fillText('TEMPORADA DE CLAN', 82, 32);
 
   ctx.fillStyle = GOLD;
-  ctx.font = '700 19px "Poppins"';
+  ctx.font = '700 24px "Poppins"';
   ctx.shadowColor = 'rgba(255,215,0,0.25)';
   ctx.shadowBlur = 10;
   ctx.fillText(temporada, 82, 56);
@@ -223,7 +223,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
 
   // --- TOTAL STRIP ---
   const stripY = headerH;
-  const stripH = 34;
+  const stripH = 42;
   const stripGrad = ctx.createLinearGradient(0, stripY, W, stripY);
   stripGrad.addColorStop(0, '#120e00');
   stripGrad.addColorStop(0.5, '#1a1500');
@@ -237,7 +237,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.fillText('⚡  TOTAL DEL CLAN', 24, stripY + 21);
 
   ctx.fillStyle = GOLD;
-  ctx.font = '700 13px "DejaVu Sans Mono"';
+  ctx.font = '700 15px "DejaVu Sans Mono"';
   ctx.textAlign = 'right';
   ctx.fillText(Number(totalPuntos).toLocaleString('es') + ' pts', W - 24, stripY + 21);
   ctx.textAlign = 'left';
@@ -247,8 +247,8 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.beginPath(); ctx.moveTo(0, stripY + stripH); ctx.lineTo(W, stripY + stripH); ctx.stroke();
 
   // --- RANKING ---
-  const listStartY = stripY + stripH + 8;
-  const rowH = 44;
+  const listStartY = stripY + stripH + 10;
+  const rowH = 56;
   const topPoints = usuarios[0]?.puntos || 1;
 
   const nameColors  = [GOLD, SILVER, BRONZE, TEXT_LIGHT, TEXT_LIGHT, TEXT_LIGHT, TEXT_MID, TEXT_MID, TEXT_MID, TEXT_MID];
@@ -301,17 +301,17 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
     }
 
     // Nombre (truncar si es muy largo)
-    ctx.font = isPodio ? '700 14px "Poppins"' : '600 13px "Poppins"';
+    ctx.font = isPodio ? '700 16px "Poppins"' : '600 15px "Poppins"';
     ctx.fillStyle = nameColors[i];
     ctx.textAlign = 'left';
     let nombre = row.usuario;
     while (ctx.measureText(nombre).width > 185 && nombre.length > 3) nombre = nombre.slice(0, -1);
     if (nombre !== row.usuario) nombre += '…';
-    ctx.fillText(nombre, 54, y + rowH / 2 + 5);
+    ctx.fillText(nombre, 66, y + rowH / 2 + 5);
 
     // Puntos
     ctx.fillStyle = ptsColors[i];
-    ctx.font = isPodio ? '700 12px "DejaVu Sans Mono"' : '600 11px "DejaVu Sans Mono"';
+    ctx.font = isPodio ? '700 14px "DejaVu Sans Mono"' : '600 13px "DejaVu Sans Mono"';
     ctx.textAlign = 'right';
     ctx.fillText(row.puntos.toLocaleString('es') + ' pts', W - 108, y + rowH / 2 + 5);
 
@@ -332,7 +332,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
     }
     ctx.fillStyle = barFill;
     if (i === 0) { ctx.shadowColor = 'rgba(255,215,0,0.3)'; ctx.shadowBlur = 4; }
-    roundRect(ctx, barX, barY, Math.max(barW * pct, 4), barH2, 2, true, false);
+    roundRect(ctx, barX, barY, Math.max(barW * pct, 5), barH2, 2, true, false);
     ctx.shadowBlur = 0;
 
     // Divisor punteado entre podio y resto
@@ -355,7 +355,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.beginPath(); ctx.moveTo(16, footerY); ctx.lineTo(W - 16, footerY); ctx.stroke();
 
   ctx.fillStyle = TEXT_DIM;
-  ctx.font = '10px "Poppins"';
+  ctx.font = '11px "Poppins"';
   ctx.textAlign = 'left';
   ctx.fillText('Ranking · Actualizado ' + formatDate(new Date()), 24, footerY + 16);
 
