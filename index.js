@@ -119,7 +119,7 @@ function roundRect(ctx, x, y, w, h, r, fill, stroke) {
 }
 
 async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIconURL }) {
-  const W = 700, H = 780;
+  const W = 900, H = 740;
   const canvas = createCanvas(W, H);
   const ctx = canvas.getContext('2d');
 
@@ -161,8 +161,8 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.beginPath(); ctx.moveTo(0, 1); ctx.lineTo(W, 1); ctx.stroke();
 
   // --- HEADER ---
-  const headerH = 96;
-  const iconX = 22, iconY = 16, iconR = 32;
+  const headerH = 110;
+  const iconX = 24, iconY = 17, iconR = 38;
 
   // Cargar ícono del clan si hay URL
   let guildIcon = null;
@@ -200,11 +200,11 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   // Texto header
   ctx.textAlign = 'left';
   ctx.fillStyle = TEXT_DIM;
-  ctx.font = '700 10px "Poppins"';
+  ctx.font = '700 13px "Poppins"';
   ctx.fillText('TEMPORADA DE CLAN', 82, 32);
 
   ctx.fillStyle = GOLD;
-  ctx.font = '700 24px "Poppins"';
+  ctx.font = '700 32px "Poppins"';
   ctx.shadowColor = 'rgba(255,215,0,0.25)';
   ctx.shadowBlur = 10;
   ctx.fillText(temporada, 82, 56);
@@ -223,7 +223,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
 
   // --- TOTAL STRIP ---
   const stripY = headerH;
-  const stripH = 42;
+  const stripH = 48;
   const stripGrad = ctx.createLinearGradient(0, stripY, W, stripY);
   stripGrad.addColorStop(0, '#120e00');
   stripGrad.addColorStop(0.5, '#1a1500');
@@ -237,7 +237,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.fillText('⚡  TOTAL DEL CLAN', 24, stripY + 21);
 
   ctx.fillStyle = GOLD;
-  ctx.font = '700 15px "DejaVu Sans Mono"';
+  ctx.font = '700 18px "DejaVu Sans Mono"';
   ctx.textAlign = 'right';
   ctx.fillText(Number(totalPuntos).toLocaleString('es') + ' pts', W - 24, stripY + 21);
   ctx.textAlign = 'left';
@@ -247,8 +247,8 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.beginPath(); ctx.moveTo(0, stripY + stripH); ctx.lineTo(W, stripY + stripH); ctx.stroke();
 
   // --- RANKING ---
-  const listStartY = stripY + stripH + 10;
-  const rowH = 56;
+  const listStartY = stripY + stripH + 8;
+  const rowH = 54;
   const topPoints = usuarios[0]?.puntos || 1;
 
   const nameColors  = [GOLD, SILVER, BRONZE, TEXT_LIGHT, TEXT_LIGHT, TEXT_LIGHT, TEXT_MID, TEXT_MID, TEXT_MID, TEXT_MID];
@@ -287,36 +287,36 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
     }
 
     // Posición
-    const posX = 36;
+    const posX = 52;
     if (isPodio) {
       ctx.font = '18px serif';
       ctx.textAlign = 'center';
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(['🥇','🥈','🥉'][i], posX, y + rowH / 2 + 7);
+      ctx.fillText(['🥇','🥈','🥉'][i], posX, y + rowH / 2 + 10);
     } else {
       ctx.fillStyle = TEXT_DIM;
-      ctx.font = '700 11px "Poppins"';
+      ctx.font = '700 15px "Poppins"';
       ctx.textAlign = 'center';
-      ctx.fillText(String(i + 1), posX, y + rowH / 2 + 4);
+      ctx.fillText(String(i + 1), posX, y + rowH / 2 + 6);
     }
 
     // Nombre (truncar si es muy largo)
-    ctx.font = isPodio ? '700 16px "Poppins"' : '600 15px "Poppins"';
+    ctx.font = isPodio ? '700 20px "Poppins"' : '600 17px "Poppins"';
     ctx.fillStyle = nameColors[i];
     ctx.textAlign = 'left';
     let nombre = row.usuario;
     while (ctx.measureText(nombre).width > 185 && nombre.length > 3) nombre = nombre.slice(0, -1);
     if (nombre !== row.usuario) nombre += '…';
-    ctx.fillText(nombre, 66, y + rowH / 2 + 5);
+    ctx.fillText(nombre, 78, y + rowH / 2 + 5);
 
     // Puntos
     ctx.fillStyle = ptsColors[i];
-    ctx.font = isPodio ? '700 14px "DejaVu Sans Mono"' : '600 13px "DejaVu Sans Mono"';
+    ctx.font = isPodio ? '700 17px "DejaVu Sans Mono"' : '600 15px "DejaVu Sans Mono"';
     ctx.textAlign = 'right';
-    ctx.fillText(row.puntos.toLocaleString('es') + ' pts', W - 108, y + rowH / 2 + 5);
+    ctx.fillText(row.puntos.toLocaleString('es') + ' pts', W - 150, y + rowH / 2 + 7);
 
     // Barra de progreso
-    const barX = W - 98, barW = 80, barH2 = 4, barY = y + rowH / 2 - 1;
+    const barX = W - 136, barW = 120, barH2 = 6, barY = y + rowH / 2 - 1;
     const pct = row.puntos / topPoints;
 
     ctx.fillStyle = '#1a1500';
@@ -332,7 +332,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
     }
     ctx.fillStyle = barFill;
     if (i === 0) { ctx.shadowColor = 'rgba(255,215,0,0.3)'; ctx.shadowBlur = 4; }
-    roundRect(ctx, barX, barY, Math.max(barW * pct, 5), barH2, 2, true, false);
+    roundRect(ctx, barX, barY, Math.max(barW * pct, 6), barH2, 2, true, false);
     ctx.shadowBlur = 0;
 
     // Divisor punteado entre podio y resto
@@ -349,13 +349,13 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   });
 
   // --- FOOTER ---
-  const footerY = H - 26;
+  const footerY = H - 32;
   ctx.strokeStyle = LINE;
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(16, footerY); ctx.lineTo(W - 16, footerY); ctx.stroke();
 
   ctx.fillStyle = TEXT_DIM;
-  ctx.font = '11px "Poppins"';
+  ctx.font = '12px "Poppins"';
   ctx.textAlign = 'left';
   ctx.fillText('Ranking · Actualizado ' + formatDate(new Date()), 24, footerY + 16);
 
