@@ -190,11 +190,11 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   // Texto header
   ctx.textAlign = 'left';
   ctx.fillStyle = TEXT_DIM;
-  ctx.font = '700 10px Arial';
+  ctx.font = '700 10px "Poppins"';
   ctx.fillText('TEMPORADA DE CLAN', 82, 32);
 
   ctx.fillStyle = GOLD;
-  ctx.font = '800 20px Arial';
+  ctx.font = '700 19px "Poppins"';
   ctx.shadowColor = 'rgba(255,215,0,0.25)';
   ctx.shadowBlur = 10;
   ctx.fillText(temporada, 82, 56);
@@ -222,12 +222,12 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.fillRect(0, stripY, W, stripH);
 
   ctx.fillStyle = TEXT_DIM;
-  ctx.font = '700 10px Arial';
+  ctx.font = '700 10px "Poppins"';
   ctx.textAlign = 'left';
   ctx.fillText('⚡  TOTAL DEL CLAN', 24, stripY + 21);
 
   ctx.fillStyle = GOLD;
-  ctx.font = '700 13px monospace';
+  ctx.font = '700 13px "DejaVu Sans Mono"';
   ctx.textAlign = 'right';
   ctx.fillText(Number(totalPuntos).toLocaleString('es') + ' pts', W - 24, stripY + 21);
   ctx.textAlign = 'left';
@@ -285,13 +285,13 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
       ctx.fillText(['🥇','🥈','🥉'][i], posX, y + rowH / 2 + 7);
     } else {
       ctx.fillStyle = TEXT_DIM;
-      ctx.font = '700 11px Arial';
+      ctx.font = '700 11px "Poppins"';
       ctx.textAlign = 'center';
       ctx.fillText(String(i + 1), posX, y + rowH / 2 + 4);
     }
 
     // Nombre (truncar si es muy largo)
-    ctx.font = isPodio ? '700 14px Arial' : '600 13px Arial';
+    ctx.font = isPodio ? '700 14px "Poppins"' : '600 13px "Poppins"';
     ctx.fillStyle = nameColors[i];
     ctx.textAlign = 'left';
     let nombre = row.usuario;
@@ -301,7 +301,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
 
     // Puntos
     ctx.fillStyle = ptsColors[i];
-    ctx.font = isPodio ? '700 12px monospace' : '600 11px monospace';
+    ctx.font = isPodio ? '700 12px "DejaVu Sans Mono"' : '600 11px "DejaVu Sans Mono"';
     ctx.textAlign = 'right';
     ctx.fillText(row.puntos.toLocaleString('es') + ' pts', W - 108, y + rowH / 2 + 5);
 
@@ -345,7 +345,7 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
   ctx.beginPath(); ctx.moveTo(16, footerY); ctx.lineTo(W - 16, footerY); ctx.stroke();
 
   ctx.fillStyle = TEXT_DIM;
-  ctx.font = '10px Arial';
+  ctx.font = '10px "Poppins"';
   ctx.textAlign = 'left';
   ctx.fillText('Ranking · Actualizado ' + formatDate(new Date()), 24, footerY + 16);
 
