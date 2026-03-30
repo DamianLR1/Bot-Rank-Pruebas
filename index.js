@@ -118,6 +118,37 @@ function roundRect(ctx, x, y, w, h, r, fill, stroke) {
   if (stroke) ctx.stroke();
 }
 
+
+function drawMedal(ctx, x, y, rank, FONT) {
+  const colors = {
+    1: { bg: '#B8860B44', border: '#FFD700', text: '#FFD700' },
+    2: { bg: '#66666644', border: '#C0C0C0', text: '#C0C0C0' },
+    3: { bg: '#7a3a0044', border: '#CD7F32', text: '#CD7F32' },
+  };
+  const c = colors[rank];
+  ctx.fillStyle = c.bg;
+  ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = c.border; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle = c.text;
+  ctx.font = '700 16px "' + FONT + '"';
+  ctx.textAlign = 'center';
+  ctx.fillText(String(rank), x, y+6);
+}
+
+function drawTrophy(ctx, x, y, size, color) {
+  ctx.fillStyle = color; ctx.strokeStyle = color; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x-size*0.4, y-size*0.5); ctx.lineTo(x+size*0.4, y-size*0.5);
+  ctx.quadraticCurveTo(x+size*0.45, y, x, y+size*0.2);
+  ctx.quadraticCurveTo(x-size*0.45, y, x-size*0.4, y-size*0.5);
+  ctx.fill();
+  ctx.fillRect(x-size*0.15, y+size*0.2, size*0.3, size*0.2);
+  ctx.fillRect(x-size*0.3, y+size*0.38, size*0.6, size*0.1);
+  ctx.beginPath(); ctx.arc(x-size*0.4, y-size*0.2, size*0.15, Math.PI*0.5, Math.PI*1.5); ctx.stroke();
+  ctx.beginPath(); ctx.arc(x+size*0.4, y-size*0.2, size*0.15, -Math.PI*0.5, Math.PI*0.5); ctx.stroke();
+}
+
 async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIconURL }) {
   const W = 900, H = 740;
   const canvas = createCanvas(W, H);
@@ -170,51 +201,39 @@ async function generarRankingCanvas({ usuarios, temporada, totalPuntos, guildIco
     try { guildIcon = await loadImage(guildIconURL); } catch (_) {}
   }
 
+  // Ícono clan (pequeño, bien posicionado)
+  const iconR2 = 28, iconX2 = 22, iconY2 = 22;
   ctx.save();
-  ctx.beginPath();
-  ctx.arc(iconX + iconR, iconY + iconR, iconR, 0, Math.PI * 2);
-  ctx.clip();
+  ctx.beginPath(); ctx.arc(iconX2+iconR2, iconY2+iconR2, iconR2, 0, Math.PI*2); ctx.clip();
   if (guildIcon) {
-    ctx.drawImage(guildIcon, iconX, iconY, iconR * 2, iconR * 2);
+    ctx.drawImage(guildIcon, iconX2, iconY2, iconR2*2, iconR2*2);
   } else {
-    const iconGrad = ctx.createRadialGradient(iconX+iconR, iconY+iconR, 0, iconX+iconR, iconY+iconR, iconR);
-    iconGrad.addColorStop(0, '#3a2a00');
-    iconGrad.addColorStop(1, '#1a1200');
-    ctx.fillStyle = iconGrad;
-    ctx.fillRect(iconX, iconY, iconR*2, iconR*2);
-    ctx.font = '22px serif';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = GOLD;
-    ctx.fillText('👑', iconX + iconR, iconY + iconR + 8);
+    const iconGrad = ctx.createRadialGradient(iconX2+iconR2, iconY2+iconR2, 0, iconX2+iconR2, iconY2+iconR2, iconR2);
+    iconGrad.addColorStop(0, '#3a2a00'); iconGrad.addColorStop(1, '#1a1200');
+    ctx.fillStyle = iconGrad; ctx.fillRect(iconX2, iconY2, iconR2*2, iconR2*2);
+    ctx.fillStyle = GOLD; ctx.font = '700 14px "Poppins"'; ctx.textAlign = 'center';
+    ctx.fillText('CLAN', iconX2+iconR2, iconY2+iconR2+5);
   }
   ctx.restore();
-
-  // Borde + glow del ícono
-  ctx.shadowColor = 'rgba(212,175,55,0.4)';
-  ctx.shadowBlur = 12;
-  ctx.strokeStyle = GOLD_DIM;
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.arc(iconX + iconR, iconY + iconR, iconR, 0, Math.PI * 2); ctx.stroke();
+  ctx.shadowColor = 'rgba(212,175,55,0.5)'; ctx.shadowBlur = 14;
+  ctx.strokeStyle = GOLD_DIM; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(iconX2+iconR2, iconY2+iconR2, iconR2, 0, Math.PI*2); ctx.stroke();
   ctx.shadowBlur = 0;
 
-  // Texto header
+  // Texto header bien separado del ícono
+  const textX = iconX2 + iconR2*2 + 18;
   ctx.textAlign = 'left';
-  ctx.fillStyle = TEXT_DIM;
-  ctx.font = '700 13px "Poppins"';
-  ctx.fillText('TEMPORADA DE CLAN', 82, 32);
-
-  ctx.fillStyle = GOLD;
-  ctx.font = '700 32px "Poppins"';
-  ctx.shadowColor = 'rgba(255,215,0,0.25)';
-  ctx.shadowBlur = 10;
-  ctx.fillText(temporada, 82, 56);
+  ctx.fillStyle = TEXT_DIM; ctx.font = '700 12px "Poppins"';
+  ctx.fillText('TEMPORADA DE CLAN', textX, 40);
+  ctx.fillStyle = GOLD; ctx.font = '700 30px "Poppins"';
+  ctx.shadowColor = 'rgba(255,215,0,0.25)'; ctx.shadowBlur = 12;
+  ctx.fillText(temporada, textX, 78);
   ctx.shadowBlur = 0;
 
-  // Trofeo derecha
-  ctx.font = '36px serif';
-  ctx.textAlign = 'right';
-  ctx.fillText('🏆', W - 18, 58);
-  ctx.textAlign = 'left';
+  // Trofeo dibujado (sin emoji)
+  ctx.shadowColor = 'rgba(255,215,0,0.4)'; ctx.shadowBlur = 10;
+  drawTrophy(ctx, W-50, 55, 38, GOLD);
+  ctx.shadowBlur = 0;
 
   // Línea separadora header
   ctx.strokeStyle = LINE;
