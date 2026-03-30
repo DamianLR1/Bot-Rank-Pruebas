@@ -19,7 +19,17 @@ const {
   TextInputStyle, PermissionsBitField, AttachmentBuilder
 } = require('discord.js');
 const { Pool } = require('pg');
-const { createCanvas, loadImage } = require('@napi-rs/canvas');
+const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
+const path = require('path');
+
+// Registrar fuentes incluidas en el proyecto
+try {
+  GlobalFonts.registerFromPath(path.join(__dirname, 'Poppins-Bold.ttf'), 'Poppins');
+  GlobalFonts.registerFromPath(path.join(__dirname, 'Poppins-Regular.ttf'), 'PoppinsLight');
+  console.log('✅ Fuentes registradas correctamente');
+} catch(e) {
+  console.warn('⚠️ Error cargando fuentes:', e.message);
+}
 require('dotenv').config();
 
 // ==========================================
